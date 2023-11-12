@@ -2,6 +2,8 @@
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 #include <CGAL/Delaunay_triangulation_2.h>
 #include <fstream>
+#include <limits>
+#include <cmath>
 
 typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
 
@@ -11,13 +13,56 @@ typedef Triangulation::Point          Point;
 
 using namespace std;
 
+//kruskal
 
+//nearest neighbor
+void nearestNeighbor(int **matrix,int N){
+    int *visited =new int[N];
+    for(int i=0;i<N;i++){
+        visited[i]=0;
+    }
+    int current=0;
+    visited[current]=1;
+    
+    int *path=new int[N];
+    path[0]=current;
+    
+    int next=0;
+    for(int i=1;i<N;i++){
+        double min=numeric_limits<double>::max();
+        // for each neighbor of current
+        for(int j=0;j<N;j++){
+            // if neighbor is not visited and distance is less than min
+            if(matrix[current][j]!=0 && visited[j]==0){
+                if(matrix[current][j]<min){
+                    min=matrix[current][j];
+                    next=j;
+                }
+            }
+        }
+        path[i]=next; // add next to path
+        visited[next]=1; 
+        current=next; // set current to next
+    }
+    cout<<"Path: ";
+    for(int i=0;i<N;i++){
+        cout<<path[i]<<" ";
+    }
+    cout<<endl;
+    double total=0;
+    for(int i=0;i<N-1;i++){
+        total+=matrix[path[i]][path[i+1]];
+    }
+    total+=matrix[path[N-1]][path[0]];
+    cout<<"Total: "<<total<<endl;
+}
+//ford-fulkerson
 
 int main(){
-    cout<<"Reading input file..."<<endl;
     ifstream in("input.cin");
     int N;
     in >> N;
+    //matrix of distances
     int **matrix = new int*[N];
     for(int i = 0; i < N; i++){
         matrix[i] = new int[N];
@@ -25,6 +70,7 @@ int main(){
             in >> matrix[i][j];
         }
     }
+    //matrix of capacities / flow
     int **capacity = new int*[N];
     for(int i = 0; i < N; i++){
         capacity[i] = new int[N];
@@ -32,7 +78,7 @@ int main(){
             in >> capacity[i][j];
         }
     }
-
+    // matrix of points
     Point **plants = new Point*[N];
     for(int i = 0; i < N; i++){
         double x,y;
@@ -46,9 +92,9 @@ int main(){
 
     //What is the shortest possible route that visits each neighborhood exactly once and returns to
     //the neighborhood of origin? 
-    //TSP
-
-
+    //TSP - Nearest Neighbor repeated
+    nearestNeighbor(matrix, N);
+    
     //The company wants to know the maximum information flow from the initial node to the final node. 
     //This should also be displayed in the standard output.
     //Ford-Fulkerson
@@ -59,6 +105,5 @@ int main(){
     // neighborhoods with more than one central.
     //CGAL - Voronoi Diagram
     Triangulation T;
-    T.insert(plants, plants+N);
 
 }
