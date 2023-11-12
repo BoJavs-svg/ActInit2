@@ -2,7 +2,7 @@
 # This is the CMake script for compiling a CGAL application.
 
 cmake_minimum_required(VERSION 3.1...3.23)
-project(Triangulation_2_Examples)
+project(ActIntegradora2)
 
 find_package(CGAL REQUIRED OPTIONAL_COMPONENTS Qt5)
 
