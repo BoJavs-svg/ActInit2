@@ -1,0 +1,5 @@
+/mnt/d/CGAL-5.6/examples/ActInt2/CMakeFiles/edit_cache.dir
+/mnt/d/CGAL-5.6/examples/ActInt2/CMakeFiles/rebuild_cache.dir
+/mnt/d/CGAL-5.6/examples/ActInt2/CMakeFiles/cgal_check_build_system.dir
+/mnt/d/CGAL-5.6/examples/ActInt2/CMakeFiles/ALL_CGAL_TARGETS.dir
+/mnt/d/CGAL-5.6/examples/ActInt2/CMakeFiles/main.dir
