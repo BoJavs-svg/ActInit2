@@ -47,11 +47,14 @@ void kruskal (vector<Edge> edges, int N) {
             }
         }
     }
-    cout << "The minimum cost is: " << cost << endl;
-    cout << "The minimum spanning tree is: " << endl;
+
+    cout << "Wiring the neighborhoods with fiber:" << endl;
     for (Edge e : result) {
-        cout << e.u << " " << e.v << endl;
+        cout << "(" << e.u << "," << e.v << ") ";
     }
+    cout << endl;
+    cout << "Total cost: " << cost << endl;
+    
 }
 
 //nearest neighbor
@@ -169,6 +172,8 @@ int main(){
         in>>c>>x>>c>>y>>c;
         plants.push_back(Point(x,y));
     }
+
+
     // The program must display which is the optimal way to wire with optical fiber connecting neighborhoods 
     //in such a way that information can be shared between any two neighborhoods.
     //Kruskal
@@ -184,16 +189,21 @@ int main(){
             }
         }
     }
+    // 1. Way of wiring the neighborhoods with fiber  (list of arcs of the form (A,B)) 
     kruskal(edges, N);
 
     //What is the shortest possible route that visits each neighborhood exactly once and returns to
     //the neighborhood of origin? 
     //TSP - Nearest Neighbor repeated
+    // 2. route to be followed by the mail delivery personnel, considering start and end in the same 
+    //neighborhoods. 
+    cout<<"Route"<<endl;
     nearestNeighbor(matrix, N);
     
     //The company wants to know the maximum information flow from the initial node to the final node. 
     //This should also be displayed in the standard output.
     //Ford-Fulkerson
+    // 3. maximum information flow value from the initial node to the final node. 
     cout<<"The maximum information flow is:"<<fordFulkerson(capacity, 0, N-1, N)<<endl;
     
     //Given the geographic location of several "exchanges" to which new homes can be connected, the company wants
@@ -201,14 +211,15 @@ int main(){
     //There is not necessarily one exchange for each neighborhood. You can have neighborhoods with no central, and
     // neighborhoods with more than one central.
     //CGAL - Voronoi Diagram
+    // 4. list of polygons (each element is a list of points of the form (x,y)). 
     Triangulation T;
     T.insert(plants.begin(), plants.end());
-
-    int x,y;
-    cin>>x>>y;
-    Point p(x,y);
-    Point nearest = T.nearest_vertex(p)->point();
-    cout<<"The nearest exchange is: "<<nearest<<endl;
+    cout<< "List of polygons: "<<endl;
+     for (Edge_iterator e = T.finite_edges_begin(); e != T.finite_edges_end(); ++e) {
+        Point p1 = T.segment(e).source();
+        Point p2 = T.segment(e).target();
+        cout << "(" << p1.x() << "," << p1.y() << ") - (" << p2.x() << "," << p2.y() << ")" << endl;
+    }
     return 0;
 
 }
